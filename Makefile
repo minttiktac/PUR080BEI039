@@ -11,7 +11,7 @@ LDFLAGS = -L/C:/msys64/ucrt64/lib -lsfml-graphics -lsfml-window -lsfml-system -l
 TARGET = main
 
 # Source files
-SRC = Coding/hello.cpp
+SRC = Coding/main.cpp
 
 # Build rule
 all: $(TARGET)
