@@ -12,6 +12,8 @@ using namespace sf;
 int player()
 {
 
+    Color color(0x071952FF);
+
     Music music;
     if (!music.openFromFile("C:/Users/Dell/Desktop/Learning/C++ Project/Coding/static/Bulleya.wav"))
     {
@@ -46,7 +48,12 @@ int player()
         error("Error Loading Pause Icon.");
         return 1;
     }
-
+    Texture playBackTexture, playForwardTexture, playNextTexture, playPrevTexture;
+    if (!playBackTexture.loadFromFile("C:/Users/Dell/Desktop/Learning/C++ Project/Coding/static/arrow-left.png") || !playForwardTexture.loadFromFile("C:/Users/Dell/Desktop/Learning/C++ Project/Coding/static/arrow-right.png") || !playPrevTexture.loadFromFile("C:/Users/Dell/Desktop/Learning/C++ Project/Coding/static/previous.png") || !playNextTexture.loadFromFile("C:/Users/Dell/Desktop/Learning/C++ Project/Coding/static/next.png"))
+    {
+        error("Error loading Icons.");
+        return 1;
+    }
     RenderWindow window(VideoMode(700, 500), "Melody Tunes");
     window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 
@@ -65,17 +72,38 @@ int player()
     }
 
     RectangleShape rectangle(Vector2f(10, 10));
+    rectangle.setFillColor(color);
     rectangle.setPosition(345, 150);
 
     Sprite playSprite(playTexture);
     Sprite pauseSprite(pauseTexture);
 
-    Vector2f iconSize(50.f, 50.f);
+    Vector2f iconSize(70.f, 70.f);
     playSprite.setScale(iconSize.x / playTexture.getSize().x, iconSize.y / playTexture.getSize().y);
     pauseSprite.setScale(iconSize.x / pauseTexture.getSize().x, iconSize.y / pauseTexture.getSize().y);
 
     playSprite.setPosition(windowSize.x / 2 - iconSize.x / 2, windowSize.y / 2 - iconSize.y / 2);
     pauseSprite.setPosition(windowSize.x / 2 - iconSize.x / 2, windowSize.y / 2 - iconSize.y / 2);
+
+    Sprite playBack(playBackTexture);
+    Sprite playForward(playForwardTexture);
+    Vector2f iconSize2(40.f, 40.f);
+    playBack.setScale(iconSize2.x / playBackTexture.getSize().x, iconSize2.y / playBackTexture.getSize().y);
+    playForward.setScale(iconSize2.x / playForwardTexture.getSize().x, iconSize2.y / playForwardTexture.getSize().y);
+
+    playBack.setPosition((windowSize.x / 2 - iconSize2.x / 2) - 70, windowSize.y/2 - iconSize2.y / 2);
+    playForward.setPosition((windowSize.x / 2 - iconSize2.x / 2) + 70, windowSize.y/2 - iconSize2.y / 2);
+
+
+    Sprite playNext(playNextTexture);
+    Sprite playPrev(playPrevTexture);
+    Vector2f iconSize3(30.f, 30.f);
+    playNext.setScale(iconSize3.x / playBackTexture.getSize().x, iconSize3.y / playBackTexture.getSize().y);
+    playPrev.setScale(iconSize3.x / playForwardTexture.getSize().x, iconSize3.y / playForwardTexture.getSize().y);
+
+    playNext.setPosition((windowSize.x / 2 - iconSize3.x / 2) + 130, (windowSize.y/2 - iconSize3.y / 2) + 4);
+    playPrev.setPosition((windowSize.x / 2 - iconSize3.x / 2) - 130, (windowSize.y/2 - iconSize3.y / 2) + 4);
+
 
     bool isPlaying = false;
 
@@ -118,6 +146,40 @@ int player()
                     isPlaying = true;
                 }
             }
+            if (event.type == Event::MouseButtonPressed)
+            {
+                if (playForward.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y))
+                {
+                    Time currentTime = music.getPlayingOffset();
+                    Time newTime = currentTime + seconds(5);
+                    if (newTime < music.getDuration())
+                        music.setPlayingOffset(newTime);
+                }
+            }
+            if (event.type == Event::KeyPressed && event.key.code == Keyboard::Right)
+            {
+                Time currentTime = music.getPlayingOffset();
+                    Time newTime = currentTime + seconds(5);
+                    if (newTime < music.getDuration())
+                        music.setPlayingOffset(newTime);
+            }
+            if (event.type == Event::MouseButtonPressed)
+            {
+                if (playBack.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y))
+                {
+                    Time currentTime = music.getPlayingOffset();
+                    Time newTime = currentTime - seconds(5);
+                    if (newTime < music.getDuration())
+                        music.setPlayingOffset(newTime);
+                }
+            }
+            if (event.type == Event::KeyPressed && event.key.code == Keyboard::Left)
+            {
+                Time currentTime = music.getPlayingOffset();
+                    Time newTime = currentTime - seconds(5);
+                    if (newTime < music.getDuration())
+                        music.setPlayingOffset(newTime);
+            }
         }
 
         float amplitude = abs(sin(music.getPlayingOffset().asSeconds() * 2));
@@ -127,7 +189,10 @@ int player()
         window.clear(Color::White);
         window.draw(backgroundSprite);
         window.draw(rectangle);
-
+        window.draw(playBack);
+        window.draw(playForward);
+        window.draw(playPrev);
+        window.draw(playNext);
         if (isPlaying)
             window.draw(pauseSprite);
         else
