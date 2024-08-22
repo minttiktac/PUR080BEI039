@@ -43,7 +43,7 @@ void error(string message)
     Sprite s(background);
 
     Texture backTexture;
-    if (!backTexture.loadFromFile("C:/Users/Dell/Desktop/Learning/C++ Project/Coding/static/Back.png"))
+    if (!backTexture.loadFromFile("C:/Users/Dell/Desktop/Learning/C++ Project/Coding/static/exit.png"))
     {
         showPopup(window, "Error Loading Icons.");
         cout << "Error Loading Icons." << endl;
@@ -54,7 +54,7 @@ void error(string message)
     Vector2f iconSize(50.f, 50.f);
     backSprite.setScale(iconSize.x / backTexture.getSize().x, iconSize.y / backTexture.getSize().y);
 
-    backSprite.setPosition(30, 20);
+    backSprite.setPosition(320, 500);
 
     string t_message = message + "\nPlease try restarting the program.";
 
@@ -76,7 +76,7 @@ void error(string message)
             {
                 if ( backSprite.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y))
                 {
-                    login();
+                    window.close();
                     return;
                 }
             }

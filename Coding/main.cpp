@@ -1,5 +1,5 @@
 #include "error.hpp"
-#include "renderWindow.hpp"
+#include "player.hpp"
 #include "login.hpp"
 
 int main()
@@ -8,7 +8,7 @@ int main()
     
     if (isLoggedIn)
     {
-        return render_window();
+        return player();
         return 0;
     }
     else 

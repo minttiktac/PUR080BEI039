@@ -9,7 +9,7 @@
 using namespace std;
 using namespace sf;
 
-int render_window()
+int player()
 {
 
     Music music;
@@ -79,9 +79,9 @@ int render_window()
 
     bool isPlaying = false;
 
-    showPopup(window,"Welcome to music player."); 
     while (window.isOpen())
     {
+        
         Event event;
         while (window.pollEvent(event))
         {

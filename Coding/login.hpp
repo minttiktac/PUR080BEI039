@@ -8,6 +8,9 @@
 using namespace std;
 using namespace sf;
 
+
+int player();
+
 int login()
 {
     RenderWindow window(sf::VideoMode(700, 500), "Login Form");
@@ -124,11 +127,16 @@ int login()
                         password += static_cast<char>(event.text.unicode);                       
                     }
                 }
+                else if (event.text.unicode >= 128)
+                {
+                    showPopup(window, "Invalid character input.");
+                    return 1;
+                }
                 
             }
 
 
-            if (event.type == Event::MouseButtonPressed)
+            if (event.type == Event::MouseButtonPressed && password != "" && username != "")
             {
                 if (submitButton.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y))
                 {
@@ -137,6 +145,7 @@ int login()
                     cout << "Logged in." << endl;                  
                     string message = "Welcome Back, " + username;
                     showPopup(window, message);
+                    player();
                     window.close();
                 }
             }
@@ -149,6 +158,7 @@ int login()
                 string message = "Welcome Back, " + username;
                 showPopup(window, message);
                 window.close();
+                player();
             }
         }
 
