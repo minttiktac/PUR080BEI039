@@ -1,17 +1,24 @@
+#ifndef ERROR_HPP
+#define ERROR_HPP
+
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <cstring>
+#include "popup.hpp"
+
+int login();
 
 using namespace std;
 using namespace sf;
 
 void error(string message)
 {
-    RenderWindow window(VideoMode(700, 500), "Melody Tune");
+    RenderWindow window(VideoMode(700, 500), "Error Encountered");
     Image icon;
     if (!icon.loadFromFile("C:/Users/Dell/Desktop/Learning/C++ Project/Coding/static/icon.png"))
     {
+        showPopup(window, "Error Loading Icon File.");   
         cout << "Error Loading Icon File." << endl << "Proceeding Without Loading." << endl;
     }
     else {
@@ -21,6 +28,7 @@ void error(string message)
     Texture background;
     if (!background.loadFromFile("C:/Users/Dell/Desktop/Learning/C++ Project/Coding/static/Melody-Error.png"))
     {
+        showPopup(window, "Error Loading Image File");
         cout << "Error Loading Error Image File." << endl << "Proceeding Without Loading." << endl;
     }
 
@@ -28,10 +36,25 @@ void error(string message)
 
     if (!font.loadFromFile("Poppins-Medium.ttf"))
     {
+        showPopup(window, "Error Loading Font File.");
         cout << "Error Loading Font File." << endl;
     }
 
     Sprite s(background);
+
+    Texture backTexture;
+    if (!backTexture.loadFromFile("C:/Users/Dell/Desktop/Learning/C++ Project/Coding/static/Back.png"))
+    {
+        showPopup(window, "Error Loading Icons.");
+        cout << "Error Loading Icons." << endl;
+        return;
+    }
+
+    Sprite backSprite(backTexture);
+    Vector2f iconSize(50.f, 50.f);
+    backSprite.setScale(iconSize.x / backTexture.getSize().x, iconSize.y / backTexture.getSize().y);
+
+    backSprite.setPosition(30, 20);
 
     string t_message = message + "\nPlease try restarting the program.";
 
@@ -49,12 +72,23 @@ void error(string message)
             {
                 window.close();
             }
+            if ((event.type == Event::MouseButtonPressed) || (event.type == Event::KeyPressed && event.key.code == Keyboard::Escape))
+            {
+                if ( backSprite.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y))
+                {
+                    login();
+                    return;
+                }
+            }
         }
         
         window.clear(Color::White);
         window.draw(s);
 
         window.draw(text);
+        window.draw(backSprite);
         window.display();
     }
 }
+
+#endif

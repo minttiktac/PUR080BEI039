@@ -54,7 +54,6 @@ int render_window()
     Vector2u textureSize = background.getSize();
     Vector2u windowSize = window.getSize();
     backgroundSprite.setScale(float(windowSize.x) / textureSize.x, float(windowSize.y) / textureSize.y);
-    showPopup(window,"Welcome to music player.");
 
     music.pause();
 
@@ -64,10 +63,6 @@ int render_window()
         error("Error Loading Font File.");
         return 1;
     }
-
-    Text text("Click the icon to Play/Pause\nPress S to Stop", font, 20);
-    text.setFillColor(Color::White);
-    text.setPosition(20, 350);
 
     RectangleShape rectangle(Vector2f(10, 10));
     rectangle.setPosition(345, 150);
@@ -84,6 +79,7 @@ int render_window()
 
     bool isPlaying = false;
 
+    showPopup(window,"Welcome to music player."); 
     while (window.isOpen())
     {
         Event event;
@@ -131,7 +127,6 @@ int render_window()
         window.clear(Color::White);
         window.draw(backgroundSprite);
         window.draw(rectangle);
-        window.draw(text);
 
         if (isPlaying)
             window.draw(pauseSprite);

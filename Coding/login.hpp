@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include "popup.hpp"
+#include "error.hpp"
 
 using namespace std;
 using namespace sf;
@@ -120,28 +121,7 @@ int login()
                     {
                         inputBox2.setOutlineThickness(5);
                         inputBox1.setOutlineThickness(2);
-                        password += static_cast<char>(event.text.unicode);
-
-                        if ((event.type == Event::MouseButtonPressed))
-                        {
-                            if (submitButton.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y))
-                            {
-                                cout << "Username: " << username << endl;
-                                cout << "Password: " << password << endl;
-                                cout << "Logged in.";
-                                window.close();
-                            }
-                        }
-
-                        if ( event.type == Event::KeyPressed && event.key.code == Keyboard::Enter)
-                        {
-                            cout << "Username: " << username << endl;
-                            cout << "Password: " << password << endl;
-                            string message = "Welcome Back, " + username;
-                            showPopup(window, message);
-                            window.close();
-                        }
-                        
+                        password += static_cast<char>(event.text.unicode);                       
                     }
                 }
                 
@@ -154,7 +134,9 @@ int login()
                 {
                     cout << "Username: " << username << endl;
                     cout << "Password: " << password << endl;
-                    cout << "Logged in." << endl;
+                    cout << "Logged in." << endl;                  
+                    string message = "Welcome Back, " + username;
+                    showPopup(window, message);
                     window.close();
                 }
             }
@@ -164,6 +146,8 @@ int login()
                 cout << "Username: " << username << endl;
                 cout << "Password: " << password << endl;
                 cout << "Logged in." << endl;
+                string message = "Welcome Back, " + username;
+                showPopup(window, message);
                 window.close();
             }
         }
