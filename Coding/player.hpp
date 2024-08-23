@@ -5,6 +5,7 @@
 #include <cmath>
 #include "error.hpp"
 #include "popup.hpp"
+#include "slider.hpp"
 
 using namespace std;
 using namespace sf;
@@ -104,6 +105,10 @@ int player()
     playNext.setPosition((windowSize.x / 2 - iconSize3.x / 2) + 130, (windowSize.y/2 - iconSize3.y / 2) + 4);
     playPrev.setPosition((windowSize.x / 2 - iconSize3.x / 2) - 130, (windowSize.y/2 - iconSize3.y / 2) + 4);
 
+    Slider playerSlider(Vector2f(100, 450), Vector2f(500, 10));
+    playerSlider.setTotalDuration(music.getDuration().asSeconds());
+    playerSlider.setThumbPosition(0);
+
 
     bool isPlaying = false;
 
@@ -172,6 +177,13 @@ int player()
                     if (newTime < music.getDuration())
                         music.setPlayingOffset(newTime);
                 }
+                if (playerSlider.onTrackClick(Vector2f(event.mouseButton.x, event.mouseButton.y)) == 2)
+                {
+                    float ratio = (event.mouseButton.x - playerSlider.getTrackPosition()) / playerSlider.getTrackWidth();
+                    float newTime = ratio * 100;
+                    playerSlider.setThumbPosition(newTime);
+                    music.setPlayingOffset(seconds(newTime * music.getDuration().asSeconds() / 100));
+                }
             }
             if (event.type == Event::KeyPressed && event.key.code == Keyboard::Left)
             {
@@ -181,6 +193,14 @@ int player()
                         music.setPlayingOffset(newTime);
             }
         }
+
+
+        float currentValue = playerSlider.getThumbPosition();
+        Time currentTime = music.getPlayingOffset();
+        Time duration = music.getDuration();
+        playerSlider.setCurrentDuration(currentTime.asSeconds());
+        currentValue = (currentTime.asSeconds() / duration.asSeconds()) * 100;
+        playerSlider.setThumbPosition(currentValue);
 
         float amplitude = abs(sin(music.getPlayingOffset().asSeconds() * 2));
         float newHeight = 10 + amplitude * 10;
@@ -197,7 +217,7 @@ int player()
             window.draw(pauseSprite);
         else
             window.draw(playSprite);
-
+        playerSlider.draw(window);
         window.display();
     }
 
